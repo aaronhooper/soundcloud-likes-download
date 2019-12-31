@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
+import { ScRestService } from './sc-rest.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { SearchComponent } from './search/search.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [ScRestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
