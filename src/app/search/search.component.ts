@@ -16,19 +16,19 @@ export class SearchComponent implements OnInit {
 
   filename = 'likes.json';
 
-  constructor(private scRest: ScRestService, private sanitizer: DomSanitizer) { }
+  constructor(private sc: ScRestService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.scRest.getJson()
+    this.sc.getJson()
       .subscribe(data => this.json = data);
 
-    this.scRest.getKey()
+    this.sc.getKey()
       .then(key => this.key = key);
   }
 
   async getFavorites() {
-    const resolved = await this.scRest.resolve(this.searchText, this.key);
-    this.json = await this.scRest.getFavorites(resolved, this.key);
+    const resolved = await this.sc.resolve(this.searchText, this.key);
+    this.json = await this.sc.getFavorites(resolved, this.key);
     console.log(this.json);
 
     this.createTrustedBlobUrl();
