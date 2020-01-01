@@ -24,8 +24,10 @@ export class ScRestService {
       .set('limit', '200')
       .set('linked_partitioning', '1')
       .set('client_id', key);
-
-    return this.http.get(target, { params }).toPromise();
+    
+    return this.http.get(target, { params })
+      .toPromise()
+      .then(json => JSON.stringify(json));
   }
 
   createFavoritesUrl(url: string) {
