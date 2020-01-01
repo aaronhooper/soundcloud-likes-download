@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ScRestService } from '../sc-rest.service';
 
 @Component({
@@ -10,8 +11,12 @@ export class SearchComponent implements OnInit {
   searchText: string;
   json: any;
   key: string;
+  blobUrl: string;
+  trustedBlob: any;
 
-  constructor(private scRest: ScRestService) { }
+  filename = 'likes.json';
+
+  constructor(private scRest: ScRestService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.scRest.getJson()
@@ -26,7 +31,10 @@ export class SearchComponent implements OnInit {
     this.json = await this.scRest.getFavorites(resolved, this.key);
     console.log(this.json);
 
-    this.downloadFile(this.json);
+    const blob = new Blob([this.json], { type: 'text/json' });
+    this.blobUrl = window.URL.createObjectURL(blob);
+    
+    this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
   }
 
   downloadFile(data) {
