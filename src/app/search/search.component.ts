@@ -31,9 +31,12 @@ export class SearchComponent implements OnInit {
     this.json = await this.scRest.getFavorites(resolved, this.key);
     console.log(this.json);
 
-    const blob = new Blob([this.json], { type: 'text/json' });
+    this.createTrustedBlobUrl(this.json);
+  }
+
+  private createTrustedBlobUrl(json) {
+    const blob = new Blob([json], { type: 'text/json' });
     this.blobUrl = window.URL.createObjectURL(blob);
-    
     this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
   }
 }
