@@ -36,11 +36,4 @@ export class SearchComponent implements OnInit {
     
     this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
   }
-
-  downloadFile(data) {
-    const blob = new Blob([data], { type: 'text/json' });
-    const url = window.URL.createObjectURL(blob);
-    window.open(url);
-  }
-
 }
