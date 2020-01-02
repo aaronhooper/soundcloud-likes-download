@@ -25,7 +25,7 @@ export class ScRestService {
       const response: any = await this.http.get(target, { params })
         .toPromise();
       data.push(response);
-      if (!response.next_href) break;
+      if (!response.next_href) { break; }
       target = response.next_href;
     }
 
