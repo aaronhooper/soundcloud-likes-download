@@ -39,7 +39,7 @@ export class ScRestService {
       .set('url', url)
       .set('client_id', key);
 
-    const json = await this.http.get(this.resolveUrl, { params })
+    const json: any = await this.http.get(this.resolveUrl, { params })
       .toPromise();
     return json.uri;
   }
