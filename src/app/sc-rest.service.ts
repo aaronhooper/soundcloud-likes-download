@@ -19,7 +19,7 @@ export class ScRestService {
       .set('linked_partitioning', '1')
       .set('client_id', key);
 
-    let data = [];
+    const data = [];
 
     for (;;) {
       const response: any = await this.http.get(target, { params })
