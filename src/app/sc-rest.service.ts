@@ -48,10 +48,6 @@ export class ScRestService {
     return JSON.stringify(response);
   }
 
-  createFavoritesUrl(url: string) {
-    return url + '/favorites';
-  }
-
   async resolve(url: string, key: string) {
     const params = new HttpParams()
       .set('url', url)
@@ -66,5 +62,9 @@ export class ScRestService {
     const response = await this.http.get(this.keyPath, { responseType: 'text' })
       .toPromise();
     return response.trim();
+  }
+
+  createFavoritesUrl(url: string) {
+    return url + '/favorites';
   }
 }
