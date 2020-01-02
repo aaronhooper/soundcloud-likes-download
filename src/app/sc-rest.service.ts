@@ -14,10 +14,6 @@ export class ScRestService {
 
   constructor(private http: HttpClient) { }
 
-  getJson(): Observable<any> {
-    return this.http.get(this.url);
-  }
-
   async getAllFavorites(profileUrl: string, key: string) {
     let target = this.createFavoritesUrl(profileUrl);
     const params = new HttpParams()

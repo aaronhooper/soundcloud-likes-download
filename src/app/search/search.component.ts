@@ -19,9 +19,6 @@ export class SearchComponent implements OnInit {
   constructor(private sc: ScRestService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.sc.getJson()
-      .subscribe(data => this.json = data);
-
     this.sc.getKey()
       .then(key => this.key = key);
   }
