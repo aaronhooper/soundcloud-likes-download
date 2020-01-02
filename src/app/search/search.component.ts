@@ -23,12 +23,15 @@ export class SearchComponent implements OnInit {
       .then(key => this.key = key);
   }
 
+  async createDownloadLink() {
+    await this.getFavorites();
+    this.createTrustedBlobUrl();
+  }
+
   async getFavorites() {
     const resolved = await this.sc.resolve(this.searchText, this.key);
     this.json = await this.sc.getAllFavorites(resolved, this.key);
     console.log(this.json);
-
-    this.createTrustedBlobUrl();
   }
 
   private createTrustedBlobUrl() {
