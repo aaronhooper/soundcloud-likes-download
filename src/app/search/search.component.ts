@@ -10,7 +10,7 @@ import { ScRestService } from '../sc-rest.service';
 export class SearchComponent implements OnInit {
   searchText: string;
   json: any;
-  key: string;
+  key: Promise<string>;
   blobUrl: string;
   trustedBlob: any;
 
@@ -19,8 +19,7 @@ export class SearchComponent implements OnInit {
   constructor(private sc: ScRestService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.sc.getKey()
-      .then(key => this.key = key);
+    this.key = this.sc.getKey();
   }
 
   async createDownloadLink() {
@@ -29,8 +28,9 @@ export class SearchComponent implements OnInit {
   }
 
   async getFavorites() {
-    const resolved = await this.sc.resolve(this.searchText, this.key);
-    this.json = await this.sc.getAllFavorites(resolved, this.key);
+    const key = await this.key;
+    const resolved = await this.sc.resolve(this.searchText, key);
+    this.json = await this.sc.getAllFavorites(resolved, key);
     console.log(this.json);
   }
 
