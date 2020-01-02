@@ -31,7 +31,6 @@ export class SearchComponent implements OnInit {
     const key = await this.key;
     const resolved = await this.sc.resolve(this.searchText, key);
     this.json = await this.sc.getAllFavorites(resolved, key);
-    console.log(this.json);
   }
 
   private createTrustedBlobUrl() {
