@@ -18,6 +18,28 @@ export class ScRestService {
     return this.http.get(this.url);
   }
 
+  async getAllFavorites(profileUrl: string, key: string) {
+    let target = this.createFavoritesUrl(profileUrl);
+    const params = new HttpParams()
+      .set('limit', '200')
+      .set('linked_partitioning', '1')
+      .set('client_id', key);
+
+    let data = [];
+
+    for (;;) {
+      const response: any = await this.http.get(target, { params })
+        .toPromise();
+      data.push(response);
+      if (!response.next_href) break;
+      target = response.next_href;
+    }
+
+    const combined = data.reduce((all, item) => all.concat(item.collection), []);
+    const formatted = JSON.stringify(combined);
+    return formatted;
+  }
+
   getFavorites(url: string, key: string) {
     const target = this.createFavoritesUrl(url);
     const params = new HttpParams()
