@@ -40,16 +40,16 @@ export class ScRestService {
     return formatted;
   }
 
-  getFavorites(url: string, key: string) {
+  async getFavorites(url: string, key: string) {
     const target = this.createFavoritesUrl(url);
     const params = new HttpParams()
       .set('limit', '200')
       .set('linked_partitioning', '1')
       .set('client_id', key);
     
-    return this.http.get(target, { params })
-      .toPromise()
-      .then(json => JSON.stringify(json));
+    const response = await this.http.get(target, { params })
+      .toPromise();
+    return JSON.stringify(response);
   }
 
   createFavoritesUrl(url: string) {
@@ -66,9 +66,9 @@ export class ScRestService {
     return json.uri;
   }
 
-  getKey() {
-    return this.http.get(this.keyPath, { responseType: 'text' })
-      .toPromise()
-      .then(text => text.trim());
+  async getKey() {
+    const response = await this.http.get(this.keyPath, { responseType: 'text' })
+      .toPromise();
+    return response.trim();
   }
 }
