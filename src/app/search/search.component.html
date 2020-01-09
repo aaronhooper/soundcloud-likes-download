@@ -4,6 +4,6 @@
         <input matInput type="url" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}">
         <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
       </mat-form-field>
-    <button (click)="createDownloadLink()">Download</button>
+    <button mat-raised-button color="primary" (click)="createDownloadLink()">Download</button>
 </form>
 <a *ngIf="trustedBlob" [href]="trustedBlob" [download]="filename">Download here</a>
