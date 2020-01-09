@@ -30,8 +30,7 @@ export class ScRestService {
     }
 
     const combined = data.reduce((all, item) => all.concat(item.collection), []);
-    const formatted = JSON.stringify(combined);
-    return formatted;
+    return combined;
   }
 
   async resolve(url: string, key: string) {

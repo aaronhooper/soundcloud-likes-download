@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
   }
 
   private createTrustedBlobUrl() {
-    const blob = new Blob([this.json], { type: 'text/json' });
+    const blob = new Blob([JSON.stringify(this.json)], { type: 'text/json' });
     this.blobUrl = window.URL.createObjectURL(blob);
     this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
   }
