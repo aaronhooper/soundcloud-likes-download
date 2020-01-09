@@ -9,12 +9,13 @@ import { ScRestService } from '../sc-rest.service';
 })
 export class SearchComponent implements OnInit {
   searchText: string;
-  json: any;
+  json: Promise<any>;
+  csv: string;
   key: Promise<string>;
   blobUrl: string;
   trustedBlob: any;
 
-  filename = 'likes.json';
+  filename = 'likes';
   options: string[] = ['json', 'csv'];
   selected: string = this.options[0];
 
@@ -32,12 +33,53 @@ export class SearchComponent implements OnInit {
   async getFavorites() {
     const key = await this.key;
     const resolved = await this.sc.resolve(this.searchText, key);
-    this.json = await this.sc.getAllFavorites(resolved, key);
+    this.json = this.sc.getAllFavorites(resolved, key);
   }
 
-  private createTrustedBlobUrl() {
-    const blob = new Blob([JSON.stringify(this.json)], { type: 'text/json' });
+  private async createTrustedBlobUrl() {
+    const json = await this.json;
+    let blob: any;
+
+    if (this.selected === 'json') {
+      blob = new Blob([JSON.stringify(json)], { type: 'text/json' });
+    }
+
+    else if (this.selected === 'csv') {
+      await this.createCSV();
+      blob = new Blob([this.csv], { type: 'text/csv' });
+    }
+
     this.blobUrl = window.URL.createObjectURL(blob);
     this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
+  }
+
+  async createCSV() {
+    const json = await this.json;
+
+    console.log("JSON:", json);
+
+    // create csv array
+    const csv = json.map(element => {
+      return new Map([
+        ['username', element.user.username],
+        ['title', element.title],
+        ['url', element.permalink_url]
+      ]);
+    });
+
+    // create csv text
+    const headers = Array.from(csv[0].keys());
+    console.log("HEADERS:", headers);
+    const topLine = headers.join(',');
+    let body = topLine + "\n";
+
+    csv.forEach(element => {
+      const line = Array.from(element.values()).join(',') + "\n";
+      body += line;
+    });
+
+    console.log(body);
+
+    this.csv = body;
   }
 }
