@@ -1,3 +1,9 @@
-<input type="text" [(ngModel)]="searchText">
-<button (click)="createDownloadLink()">Download</button>
+<form>
+    <mat-form-field appearance="outline">
+        <mat-label>Profile URL</mat-label>
+        <input matInput type="url" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      </mat-form-field>
+    <button (click)="createDownloadLink()">Download</button>
+</form>
 <a *ngIf="trustedBlob" [href]="trustedBlob" [download]="filename">Download here</a>
