@@ -15,6 +15,8 @@ export class SearchComponent implements OnInit {
   trustedBlob: any;
 
   filename = 'likes.json';
+  options: string[] = ['json', 'csv'];
+  selected: string = this.options[0];
 
   constructor(private sc: ScRestService, private sanitizer: DomSanitizer) { }
 
