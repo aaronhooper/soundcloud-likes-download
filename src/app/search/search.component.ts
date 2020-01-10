@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScRestService } from '../sc-rest.service';
+import Papa from 'papaparse';
 
 @Component({
   selector: 'app-search',
@@ -37,10 +38,10 @@ export class SearchComponent implements OnInit {
   }
 
   private async createTrustedBlobUrl() {
-    const json = await this.json;
     let blob: any;
-
+    
     if (this.selected === 'json') {
+      const json = await this.json;
       blob = new Blob([JSON.stringify(json)], { type: 'text/json' });
     }
 
@@ -55,31 +56,17 @@ export class SearchComponent implements OnInit {
 
   async createCSV() {
     const json = await this.json;
+    const headers = ['username', 'title', 'url'];
 
-    console.log("JSON:", json);
-
-    // create csv array
-    const csv = json.map(element => {
-      return new Map([
-        ['username', element.user.username],
-        ['title', element.title],
-        ['url', element.permalink_url]
-      ]);
+    let values = json.map(like => {
+      return headers.reduce((all, item, index) => all.concat(like[item]), []);
     });
+    
+    const options = {
+      columns: headers,
+      header: true
+    };
 
-    // create csv text
-    const headers = Array.from(csv[0].keys());
-    console.log("HEADERS:", headers);
-    const topLine = headers.join(',');
-    let body = topLine + "\n";
-
-    csv.forEach(element => {
-      const line = Array.from(element.values()).join(',') + "\n";
-      body += line;
-    });
-
-    console.log(body);
-
-    this.csv = body;
+    this.csv = Papa.unparse(values, options);
   }
 }
