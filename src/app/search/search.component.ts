@@ -14,7 +14,6 @@ export class SearchComponent implements OnInit {
   key: Promise<string>;
   trustedBlob: any;
 
-  filename = 'likes';
   options: string[] = ['json', 'csv'];
   selected: string = this.options[0];
 
@@ -22,6 +21,10 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.key = this.sc.getKey();
+  }
+
+  get filename() {
+    return 'likes' + '.' + this.selected;
   }
 
   async clickHandle() {
