@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScRestService } from '../sc-rest.service';
-import Papa from 'papaparse';
+import { createCSV } from './util';
 
 @Component({
   selector: 'app-search',
@@ -11,7 +11,6 @@ import Papa from 'papaparse';
 export class SearchComponent implements OnInit {
   searchText: string;
   json: Promise<any>;
-  csv: string;
   key: Promise<string>;
   blobUrl: string;
   trustedBlob: any;
@@ -38,34 +37,19 @@ export class SearchComponent implements OnInit {
   }
 
   private async createTrustedBlobUrl() {
+    const json = await this.json;
     let blob: any;
-    
+
     if (this.selected === 'json') {
-      const json = await this.json;
       blob = new Blob([JSON.stringify(json)], { type: 'text/json' });
     }
 
     else if (this.selected === 'csv') {
-      await this.createCSV();
-      blob = new Blob([this.csv], { type: 'text/csv' });
+      const csv = createCSV(json);
+      blob = new Blob([csv], { type: 'text/csv' });
     }
 
     this.blobUrl = window.URL.createObjectURL(blob);
     this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
-  }
-
-  async createCSV() {
-    const json = await this.json;
-    const headers = ['username', 'title', 'url'];
-
-    let values = json.map(like => [
-        like.user.username,
-        like.title,
-        like.permalink_url
-    ]);
-
-    values.unshift(headers);
-    const options = {};
-    this.csv = Papa.unparse(values, options);
   }
 }
