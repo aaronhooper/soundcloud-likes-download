@@ -27,7 +27,15 @@ export class SearchComponent implements OnInit {
 
   async clickHandle() {
     await this.getFavorites();
-    this.attachTrustedBlobUrl();
+
+    if (this.selected === 'json') {
+      const jsonString = JSON.stringify(await this.json);
+      this.attachTrustedBlobUrl(createBlob(jsonString, 'json'));
+    }
+    else if (this.selected === 'csv') {
+      const csv = createCSV(await this.json);
+      this.attachTrustedBlobUrl(createBlob(csv, 'csv'));
+    }
   }
 
   async getFavorites() {
@@ -36,19 +44,7 @@ export class SearchComponent implements OnInit {
     this.json = this.sc.getAllFavorites(resolved, key);
   }
 
-  private async attachTrustedBlobUrl() {
-    const json = await this.json;
-    let blob: any;
-
-    if (this.selected === 'json') {
-      const jsonString = JSON.stringify(json);
-      blob = createBlob(jsonString, 'json');
-    }
-    else if (this.selected === 'csv') {
-      const csv = createCSV(json);
-      blob = createBlob(csv, 'csv');
-    }
-
+  private async attachTrustedBlobUrl(blob) {
     this.blobUrl = window.URL.createObjectURL(blob);
     this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
   }
