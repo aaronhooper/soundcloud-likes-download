@@ -12,7 +12,6 @@ export class SearchComponent implements OnInit {
   searchText: string;
   json: Promise<any>;
   key: Promise<string>;
-  blobUrl: string;
   trustedBlob: any;
 
   filename = 'likes';
@@ -45,7 +44,7 @@ export class SearchComponent implements OnInit {
   }
 
   private async attachTrustedBlobUrl(blob) {
-    this.blobUrl = window.URL.createObjectURL(blob);
-    this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(this.blobUrl);
+    const blobUrl = window.URL.createObjectURL(blob);
+    this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
   }
 }
