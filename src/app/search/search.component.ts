@@ -25,9 +25,9 @@ export class SearchComponent implements OnInit {
     this.key = this.sc.getKey();
   }
 
-  async createDownloadLink() {
+  async clickHandle() {
     await this.getFavorites();
-    this.createTrustedBlobUrl();
+    this.attachTrustedBlobUrl();
   }
 
   async getFavorites() {
@@ -36,7 +36,7 @@ export class SearchComponent implements OnInit {
     this.json = this.sc.getAllFavorites(resolved, key);
   }
 
-  private async createTrustedBlobUrl() {
+  private async attachTrustedBlobUrl() {
     const json = await this.json;
     let blob: any;
 
