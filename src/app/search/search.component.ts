@@ -58,15 +58,14 @@ export class SearchComponent implements OnInit {
     const json = await this.json;
     const headers = ['username', 'title', 'url'];
 
-    let values = json.map(like => {
-      return headers.reduce((all, item, index) => all.concat(like[item]), []);
-    });
-    
-    const options = {
-      columns: headers,
-      header: true
-    };
+    let values = json.map(like => [
+        like.user.username,
+        like.title,
+        like.permalink_url
+    ]);
 
+    values.unshift(headers);
+    const options = {};
     this.csv = Papa.unparse(values, options);
   }
 }
