@@ -10,9 +10,9 @@ import { createCSV, createBlob } from './util';
 })
 export class SearchComponent implements OnInit {
   searchText: string;
-  json: Promise<any>;
-  key: Promise<string>;
   trustedBlob: any;
+  private json: Promise<any>;
+  private key: Promise<string>;
 
   options: string[] = ['json', 'csv'];
   selected: string = this.options[0];
@@ -40,7 +40,7 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  async getFavorites() {
+  private async getFavorites() {
     const key = await this.key;
     const resolved = await this.sc.resolve(this.searchText, key);
     this.json = this.sc.getAllFavorites(resolved, key);

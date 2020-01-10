@@ -49,7 +49,7 @@ export class ScRestService {
     return response.trim();
   }
 
-  createFavoritesUrl(url: string) {
+  private createFavoritesUrl(url: string) {
     return url + '/favorites';
   }
 }
