@@ -13,3 +13,8 @@ export function createCSV(json) {
     const options = {};
     return Papa.unparse(values, options);
 }
+
+
+export function createBlob(data, type) {
+    return new Blob([data], { type: `text/${type}` });
+}

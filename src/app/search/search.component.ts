@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScRestService } from '../sc-rest.service';
-import { createCSV } from './util';
+import { createCSV, createBlob } from './util';
 
 @Component({
   selector: 'app-search',
@@ -41,12 +41,12 @@ export class SearchComponent implements OnInit {
     let blob: any;
 
     if (this.selected === 'json') {
-      blob = new Blob([JSON.stringify(json)], { type: 'text/json' });
+      const jsonString = JSON.stringify(json);
+      blob = createBlob(jsonString, 'json');
     }
-
     else if (this.selected === 'csv') {
       const csv = createCSV(json);
-      blob = new Blob([csv], { type: 'text/csv' });
+      blob = createBlob(csv, 'csv');
     }
 
     this.blobUrl = window.URL.createObjectURL(blob);
