@@ -43,7 +43,7 @@ export class SearchComponent implements OnInit {
     this.json = this.sc.getAllFavorites(resolved, key);
   }
 
-  private async attachTrustedBlobUrl(blob) {
+  private attachTrustedBlobUrl(blob) {
     const blobUrl = window.URL.createObjectURL(blob);
     this.trustedBlob = this.sanitizer.bypassSecurityTrustUrl(blobUrl);
   }
