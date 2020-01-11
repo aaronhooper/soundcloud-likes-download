@@ -33,25 +33,25 @@ export class SearchComponent implements OnInit {
     return 'likes' + '.' + this.selected;
   }
 
-  clickHandle() {
-    this.getFavorites()
-      .then(() => this.json)
-      .then(json => {
-        if (this.selected === 'json') {
-          const jsonString = JSON.stringify(json);
-          this.attachTrustedBlobUrl(createBlob(jsonString, 'json'));
-        }
-        else if (this.selected === 'csv') {
-          const csv = createCSV(json);
-          this.attachTrustedBlobUrl(createBlob(csv, 'csv'));
-        }
-      })
-      .catch(err => {
-        if (err instanceof HttpErrorResponse) {
-          this.openSnackBar("Could not connect. Please try again later.");
-        }
-        else throw err;
-      });
+  async clickHandle() {
+    try {
+      await this.getFavorites();
+    } catch (e) {
+      if (e.name === 'HttpErrorResponse') {
+        this.openSnackBar("Could not connect. Please try again later.");
+        return null;
+      }
+      else throw e;
+    }
+
+    if (this.selected === 'json') {
+      const jsonString = JSON.stringify(await this.json);
+      this.attachTrustedBlobUrl(createBlob(jsonString, 'json'));
+    }
+    else if (this.selected === 'csv') {
+      const csv = createCSV(await this.json);
+      this.attachTrustedBlobUrl(createBlob(csv, 'csv'));
+    }
   }
 
   openSnackBar(message: string) {
