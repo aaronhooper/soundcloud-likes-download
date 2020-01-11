@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScRestService } from '../sc-rest.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { createCSV, createBlob } from './util';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-search',
@@ -17,7 +19,11 @@ export class SearchComponent implements OnInit {
   options: string[] = ['json', 'csv'];
   selected: string = this.options[0];
 
-  constructor(private sc: ScRestService, private sanitizer: DomSanitizer) { }
+  constructor(
+    private sc: ScRestService,
+    private sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit() {
     this.key = this.sc.getKey();
@@ -27,17 +33,31 @@ export class SearchComponent implements OnInit {
     return 'likes' + '.' + this.selected;
   }
 
-  async clickHandle() {
-    await this.getFavorites();
+  clickHandle() {
+    this.getFavorites()
+      .then(() => this.json)
+      .then(json => {
+        if (this.selected === 'json') {
+          const jsonString = JSON.stringify(json);
+          this.attachTrustedBlobUrl(createBlob(jsonString, 'json'));
+        }
+        else if (this.selected === 'csv') {
+          const csv = createCSV(json);
+          this.attachTrustedBlobUrl(createBlob(csv, 'csv'));
+        }
+      })
+      .catch(err => {
+        if (err instanceof HttpErrorResponse) {
+          this.openSnackBar("Could not connect. Please try again later.");
+        }
+        else throw err;
+      });
+  }
 
-    if (this.selected === 'json') {
-      const jsonString = JSON.stringify(await this.json);
-      this.attachTrustedBlobUrl(createBlob(jsonString, 'json'));
-    }
-    else if (this.selected === 'csv') {
-      const csv = createCSV(await this.json);
-      this.attachTrustedBlobUrl(createBlob(csv, 'csv'));
-    }
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 5000,
+    });
   }
 
   private async getFavorites() {
