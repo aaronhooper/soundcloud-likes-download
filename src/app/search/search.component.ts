@@ -38,7 +38,7 @@ export class SearchComponent implements OnInit {
     this.progressBarVisible = true;
 
     try {
-      await this.getFavorites();
+      await this.getJson();
     } catch (e) {
       if (e.name === 'HttpErrorResponse') {
         this.openSnackBar("Could not connect. Please try again later.");
@@ -65,7 +65,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  private async getFavorites() {
+  private async getJson() {
     const key = await this.key;
     const resolved = await this.sc.resolve(this.searchText, key);
     this.json = this.sc.getAllFavorites(resolved, key);
