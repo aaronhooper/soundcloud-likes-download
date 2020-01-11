@@ -18,6 +18,7 @@ export class SearchComponent implements OnInit {
 
   options: string[] = ['json', 'csv'];
   selected: string = this.options[0];
+  progressBarVisible: boolean = false;
 
   constructor(
     private sc: ScRestService,
@@ -34,6 +35,8 @@ export class SearchComponent implements OnInit {
   }
 
   async clickHandle() {
+    this.progressBarVisible = true;
+
     try {
       await this.getFavorites();
     } catch (e) {
@@ -52,6 +55,8 @@ export class SearchComponent implements OnInit {
       const csv = createCSV(await this.json);
       this.attachTrustedBlobUrl(createBlob(csv, 'csv'));
     }
+
+    this.progressBarVisible = false;
   }
 
   openSnackBar(message: string) {
