@@ -3,7 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ScRestService } from '../sc-rest.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { createCSV, createBlob } from './util';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-search',
