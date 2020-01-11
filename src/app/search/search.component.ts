@@ -42,6 +42,7 @@ export class SearchComponent implements OnInit {
     } catch (e) {
       if (e.name === 'HttpErrorResponse') {
         this.openSnackBar("Could not connect. Please try again later.");
+        this.progressBarVisible = false;
         return null;
       }
       else throw e;
